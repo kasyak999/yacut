@@ -7,11 +7,6 @@ from . import app, db
 from .models import URLMap
 from .error_handlers import InvalidAPIUsage
 
-# from .views import random_opinion
-# from .error_handlers import InvalidAPIUsage
-
-
-# /api/id/<short_id>/ — GET-запрос на получение оригинальной ссылки по указанному короткому идентификатору.
 
 LEN_SHORT_URL = 6
 
@@ -27,7 +22,7 @@ def post_add_url():
     data = request.get_json(silent=True)
 
     if data is None or 'url' not in data:
-        raise InvalidAPIUsage('url не указан')
+        raise InvalidAPIUsage('Отсутствует тело запроса')
     if URLMap.query.filter_by(original=data['url']).first() is not None:
         raise InvalidAPIUsage('Такое url уже есть в базе данных')
     if data.get('custom_id') and (
@@ -44,3 +39,11 @@ def post_add_url():
     db.session.commit()
 
     return jsonify(opinion.to_dict()), 201
+
+
+@app.route('/api/id/<short_id>/', methods=['GET'])
+def get_url(short_id):
+    result = URLMap.query.filter_by(short=short_id).first()
+    if result is None:
+        raise InvalidAPIUsage('Указанный id не найден', 404)
+    return jsonify({"url": result.original}), 201
