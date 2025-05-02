@@ -36,8 +36,6 @@ class InvalidAPIUsage(Exception):
         return dict(message = self.message)
 
 
-# Обработчик кастомного исключения для API.
 @app.errorhandler(InvalidAPIUsage)
 def invalid_api_usage(error):
-    # Возвращает в ответе текст ошибки и статус-код:
     return jsonify(error.to_dict()), error.status_code
