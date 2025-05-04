@@ -36,15 +36,21 @@
               </div>
               <div>
                 {{ form.custom_id(class="form-control form-control-lg py-2 mb-3", placeholder=form.custom_id.label.text, id="form-link")}}
-                {% with messages = get_flashed_messages(category_filter=["free-message"]) %}
-                  {% if messages %}
-                  <p><span style="color:red">
-                    {% for message in messages %}
-                      {{ message }}
+                <p><span style="color:red">
+                  {% if form.custom_id.errors %}
+                    {% for error in form.custom_id.errors %}
+                      {{ error }}
                     {% endfor %}
-                  </span></p>
                   {% endif %}
-                {% endwith %}
+
+                  {% with messages = get_flashed_messages(category_filter=["free-message"]) %}
+                    {% if messages %}
+                      {% for message in messages %}
+                        {{ message }}
+                      {% endfor %}
+                    {% endif %}
+                  {% endwith %}
+                </span></p>
               </div>
 
               {{ form.submit(class="btn btn-primary") }}

@@ -18,11 +18,6 @@ def index_view():
                 'Предложенный вариант короткой ссылки уже существует.',
                 'free-message')
             return render_template('index.html', form=form)
-        if URLMap.query.filter_by(
-            original=form.original_link.data
-        ).first() is not None:
-            flash('Такое url уже есть в базе данных', 'original-message')
-            return render_template('index.html', form=form)
 
         opinion = URLMap(
             original=form.original_link.data,
@@ -35,7 +30,6 @@ def index_view():
             'Ваша новая ссылка готова: <br>'
             f'<a href="{full_link}" target="_blank">{full_link}</a>',
             'ok-message')
-        return render_template('index.html', form=form)
     return render_template('index.html', form=form)
 
 
