@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, Length, Optional
 class OpinionForm(FlaskForm):
     custom_id = StringField(
         'Ваш вариант короткой ссылки',
-        validators=[Length(1, 128), Optional()]
+        validators=[Length(1, 16), Optional()]
     )
     original_link = URLField(
         'Длинная ссылка',

@@ -15,7 +15,7 @@ def index_view():
             else get_unique_short_id()
 
         if URLMap.query.filter_by(short=short).first() is not None:
-            flash('Такая короткая ссылка уже используется!', 'free-message')
+            flash('Предложенный вариант короткой ссылки уже существует.', 'free-message')
             return render_template('index.html', form=form)
         if URLMap.query.filter_by(
             original=form.original_link.data
