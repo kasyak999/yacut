@@ -18,13 +18,21 @@
             <div>
               <div>
                 {{ form.original_link(class="form-control form-control-lg py-2 mb-3", placeholder=form.original_link.label.text, id="form-title")}}
-                {% if form.original_link.errors %}
-                  <p><span style="color:red">
-                    {% for error in form.original_link.errors %}
-                      {{ error }}
-                    {% endfor %}
-                  </span></p>
-              {% endif %}
+                <p><span style="color:red">
+                  {% if form.original_link.errors %}
+                      {% for error in form.original_link.errors %}
+                        {{ error }}
+                      {% endfor %}
+                  {% endif %}
+
+                  {% with messages = get_flashed_messages(category_filter=["original-message"]) %}
+                    {% if messages %}
+                      {% for message in messages %}
+                        {{ message }}
+                      {% endfor %}
+                    {% endif %}
+                  {% endwith %}
+                </span></p>
               </div>
               <div>
                 {{ form.custom_id(class="form-control form-control-lg py-2 mb-3", placeholder=form.custom_id.label.text, id="form-link")}}
@@ -54,7 +62,15 @@
         </div>
         <div class="col-sm">
           <p class="text-center">
-          <h5 class="text-center">Пример информационного сообщения</h5>
+            <h5 class="text-center">
+              {% with messages = get_flashed_messages(category_filter=["ok-message"]) %}
+                {% if messages %}
+                  {% for message in messages %}
+                    {{ message|safe }}
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+            </h5>
           </p>
         </div>
         <div class="col-sm">

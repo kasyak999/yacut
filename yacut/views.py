@@ -13,23 +13,28 @@ def index_view():
     if form.validate_on_submit():
         short = form.custom_id.data if form.custom_id.data \
             else get_unique_short_id()
- 
+
         if URLMap.query.filter_by(short=short).first() is not None:
             flash('Такая короткая ссылка уже используется!', 'free-message')
             return render_template('index.html', form=form)
+        if URLMap.query.filter_by(
+            original=form.original_link.data
+        ).first() is not None:
+            flash('Такое url уже есть в базе данных', 'original-message')
+            return render_template('index.html', form=form)
 
-        # opinion = URLMap(
-        #     title=form.title.data,
-        #     text=form.text.data,
-        #     source=form.source.data
-        # )
-    #     # Затем добавить его в сессию работы с базой данных:
-    #     db.session.add(opinion)
-    #     # И зафиксировать изменения:
-    #     db.session.commit()
-    #     # Затем переадресовать пользователя на страницу добавленного мнения:
-    #     return redirect(url_for('opinion_view', id=opinion.id))
-    # # Если валидация не пройдена — просто отрисовать страницу с формой:
+        opinion = URLMap(
+            original=form.original_link.data,
+            short=short,
+        )
+        db.session.add(opinion)
+        db.session.commit()
+        full_link = url_for('href_view', short_id=short, _external=True)
+        flash(
+            'Ваша новая ссылка готова: <br>'
+            f'<a href="{full_link}" target="_blank">{full_link}</a>',
+            'ok-message')
+        return render_template('index.html', form=form)
     return render_template('index.html', form=form)
 
 
