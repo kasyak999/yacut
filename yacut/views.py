@@ -38,7 +38,7 @@ def index_view():
     return render_template('index.html', form=form)
 
 
-@app.route('/<short_id>/', methods=['GET'])
+@app.route('/<short_id>', methods=['GET'])
 def href_view(short_id):
     result = URLMap.query.filter_by(short=short_id).first()
     if result is None:
