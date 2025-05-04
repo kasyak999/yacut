@@ -1,4 +1,4 @@
-from flask import abort, flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for
 
 from . import app, db
 from .forms import OpinionForm
@@ -35,7 +35,6 @@ def index_view():
 
 @app.route('/<short_id>', methods=['GET'])
 def href_view(short_id):
-    result = URLMap.query.filter_by(short=short_id).first()
-    if result is None:
-        abort(404)
-    return redirect(result.original)
+    return redirect(
+        URLMap.query.filter_by(short=short_id).first_or_404().original
+    )
