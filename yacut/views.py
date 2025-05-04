@@ -9,13 +9,14 @@ from .api_views import get_unique_short_id
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
     form = OpinionForm()
-    # return render_template('index.html')
     if form.validate_on_submit():
         short = form.custom_id.data if form.custom_id.data \
             else get_unique_short_id()
 
         if URLMap.query.filter_by(short=short).first() is not None:
-            flash('Предложенный вариант короткой ссылки уже существует.', 'free-message')
+            flash(
+                'Предложенный вариант короткой ссылки уже существует.',
+                'free-message')
             return render_template('index.html', form=form)
         if URLMap.query.filter_by(
             original=form.original_link.data
