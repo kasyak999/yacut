@@ -14,7 +14,10 @@ LEN_SHORT_URL = 6
 def get_unique_short_id():
     """Генерирует короткий идентификатор заданной длины"""
     chars = string.ascii_letters + string.digits  # A-Z, a-z, 0-9
-    return ''.join(random.choices(chars, k=LEN_SHORT_URL))
+    while True:
+        new_id = ''.join(random.choices(chars, k=LEN_SHORT_URL))
+        if URLMap.query.filter_by(short=new_id).first() is None:
+            return new_id
 
 
 @app.route('/api/id/', methods=['POST'])
@@ -25,14 +28,12 @@ def post_add_url():
         raise InvalidAPIUsage('Отсутствует тело запроса')
     if 'url' not in data:
         raise InvalidAPIUsage('"url" является обязательным полем!')
-    if URLMap.query.filter_by(original=data['url']).first() is not None:
-        raise InvalidAPIUsage(
-            'Предложенный вариант короткой ссылки уже существует.')
 
     custom_id = data.get('custom_id')
     if custom_id:
         if URLMap.query.filter_by(short=custom_id).first() is not None:
-            raise InvalidAPIUsage('Такое custom_id уже есть в базе данных')
+            raise InvalidAPIUsage(
+                'Предложенный вариант короткой ссылки уже существует.')
 
         if not re.fullmatch(r'^[A-Za-z0-9]+$', custom_id) \
                 or len(custom_id) > 16:
