@@ -1,6 +1,3 @@
-import random
-import string
-
 from flask import flash, redirect, render_template, url_for
 
 from . import app, db
