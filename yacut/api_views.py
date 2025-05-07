@@ -4,7 +4,7 @@ from flask import jsonify, request, url_for
 from . import app, db
 from .models import URLMap
 from .error_handlers import InvalidAPIUsage
-from .views import get_unique_short_id
+from .ultis import get_unique_short_id
 
 
 @app.route('/api/id/', methods=['POST'])
